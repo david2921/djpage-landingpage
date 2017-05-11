@@ -96,6 +96,15 @@ class Student : public Person {
 			this->lopHoc = lopHoc;
 			this->next = NULL;
 		}
+        // khoi tao sinh vien de test
+    Student(string hoTen, string ngaySinh, string queQuan, int diem, string lopHoc) {
+        this->setHoTen(hoTen);
+        this->setNgaySinh(ngaySinh);
+        this->setQueQuan(queQuan);
+        this->diem = diem;
+        this->lopHoc = lopHoc;
+        this->next = NULL;
+    }
 		// cac phuong thuc get
 		int getDiem() {
 			return (diem);
@@ -168,7 +177,9 @@ bool xoaSinhVien(Student *danhSach, int soThuTu) {
 	Student *sinhVienTruocSinhVienCanXoa = timKiemSinhVien(danhSach, soThuTu);
 	if (sinhVienTruocSinhVienCanXoa == NULL) {
 		// sinh vien can xoa la sinh vien dau danh sach
-		if (danhSach)
+		if (danhSach->getSoThuTu() == soThuTu && danhSach->getNext() == NULL) {
+			danhSach = NULL;
+		}
 		cout << "Khong tim thay sinh vien can xoa" << endl;
 		return (false);
 	} else {
@@ -176,24 +187,80 @@ bool xoaSinhVien(Student *danhSach, int soThuTu) {
 		// sinh vien can xoa la sinh vien cuoi cung trong danh sach
 		if (sinhVienCanXoa->getNext() == NULL) {
 			sinhVienTruocSinhVienCanXoa->setNext(NULL);
+			return (true); // xoa thanh cong
+		} else {
+			// sinh vien nam ben trong danh sach
+			sinhVienTruocSinhVienCanXoa->setNext(sinhVienCanXoa->getNext());
+			return (true); // xoa thanh cong
 		}
-		// sinh vien can xoa la sinh vien dau danh sach
-		if (sinhVienCanXoa )
 	}
 }
 
+// sap xep tang dan theo diem trong danh sach sinh vien
+// Input: Danh sach sinh vien
+void sapXepDanhSach(Student *danhSach) {
+	// duyet het danh sach
+	Student *ptr = danhSach;
+	while (ptr != NULL) {
+		if (ptr->getDiem() > ptr->getNext()->getDiem()) {
+            cout << "1---" << endl;
+			// doi cho vi tri
+			Student *temp = ptr->getNext();
+			ptr->setNext(ptr);
+			ptr = temp;
+			// doi vi tri next cua 2 phan tu
+//            ptr->setNext(ptr);
+//            ptr->getNext()->setNext(temp->getNext());
+        }  else {
+            ptr = ptr->getNext();
+        }
+	}
+//    while (ptr->getNext() != NULL) {
+//        Student *next = ptr->getNext();
+//        while (next != NULL) {
+//            
+//            if (ptr->getDiem() > next->getDiem()) {
+//                // doi vi tri
+//                Student *temp = next;
+//                next = ptr;
+//                ptr = temp;
+//                cout << "1" << endl;
+//            }
+//            next = next->getNext();
+//        }
+//        ptr = ptr->getNext();
+//    }
+    Student *ptrT = ptr;
+    while (ptrT != NULL) {
+        ptrT->hienThiThongTin();
+        ptrT = ptrT->getNext();
+    }
+}
 
 int main() {
 	
-	Student *st1 = new Student();
-	Student *st2 = new Student();
+	Student *st1 = new Student("h1", "1", "q1", 4, "d1");
+	Student *st2 = new Student("h2", "2", "q2", 1, "d2");
+    Student *st3 = new Student("h3", "3", "q3", 5, "d3");
 	st1->setNext(st2);
+    st2->setNext(st3);
 	
 	Student *ptr = st1;
 	while (ptr != NULL) {
 		ptr->hienThiThongTin();
 		ptr = ptr->getNext();
 	}
-	
+    
+//    xoaSinhVien();
+    sapXepDanhSach(st1);
+    
+    cout << "------------------------------" << endl;
+//    ptr = st1;
+//    while (ptr != NULL) {
+//        ptr->hienThiThongTin();
+//        ptr = ptr->getNext();
+//    }
+    
 	return (0);
 }
+
