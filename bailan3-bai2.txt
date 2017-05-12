@@ -1,0 +1,6 @@
+Yêu cầu: 
+- Nắm vững khái niệm uid, euid, own, mod 
+Bài tập:  
+- Sử dụng ngôn ngữ lập trình C/C++ trên môi trường Ubuntu, xây dựng 2 chương trình: o Set password cho 1 user bất kỳ bằng quyền người dùng thường. o Có 2 user thường, chạy tiến trình bằng quyền user 1 nhưng thực hiện lệnh id thì in ra thông tin user 2 
+Tài liệu tham khảo: 
+- https://en.wikipedia.org/wiki/Sticky_bit - https://en.wikipedia.org/wiki/Setuid - Google
