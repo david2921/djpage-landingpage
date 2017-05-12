@@ -1,0 +1,20 @@
+Tên, phiên bản, kiến trúc (32bit hay 64bit): lsb_release -a hoac cat /etc/lsb-release
+Danh sách các gói phần mềm được cài đặt: dpkg -l
+
+Xem cau hinh may:
+CPU: lscpu hoac cat /proc/cpuinfo
+RAM: free -m
+O cung: df -h
+Tai lieu: https://vinahost.vn/ac/knowledgebase/206/Hng-dn-kim-tra-cu-hinh-Server.html
+http://centos-vn.blogspot.com/2013/07/cac-lenh-thong-dung-xem-thong-tin-phan.html
+https://wikitipz.com/thu-thuat-may-tinh/serial-cau-lenh-trong-linux-phan-1-cac-cau-lenh-quan-tri-va-theo-doi-server/
+https://wikitipz.com/thu-thuat-may-tinh/serial-cau-lenh-trong-linux-phan-1-cac-cau-lenh-quan-tri-va-theo-doi-server/
+
+Xem thông tin về mạng:
+Địa chỉ IP, Gateway: ifconfig -a
+DNS: cat /etc/resolv.conf
+
+Quản lý tiến trình
+Xem danh sách các tiến trình đang chạy: Tên, PID, User, Lệnh để chạy tiến trình: top
+Tắt tiến trình theo PID: kill <pid>
+Tắt tiến trình theo tên: killall <name>
