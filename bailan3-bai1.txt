@@ -1,0 +1,93 @@
+Yêu cầu:
+1. Cài đặt OS, phần mềm  (1đ)
+1.1. Cài đặt Ubuntu 
+1.2. Cài đặt phần mềm
+Cài đặt một số phần mềm thông dụng theo các cách khác nhau
+⦁	Chạy file .deb
+⦁	Cài qua apt-get
+⦁	Build từ source code
+2. Tìm hiểu lệnh (2đ)
+Tìm hiểu một số lệnh hay dùng
+⦁	Xem thông tin OS
+⦁	Tên, phiên bản, kiến trúc (32bit hay 64bit)
+⦁	Danh sách các gói phần mềm được cài đặt
+⦁	Xem cấu hình máy
+⦁	CPU
+⦁	RAM
+⦁	Ổ cứng
+⦁	Xem thông tin về mạng
+⦁	Địa chỉ IP, Gateway, DNS...
+⦁	Các kết nối đang mở và tiến trình tương ứng.
+⦁	Quản lý tiến trình
+⦁	Xem danh sách các tiến trình đang chạy: Tên, PID, User, Lệnh để chạy tiến trình
+⦁	Tắt tiến trình theo PID
+⦁	Tắt tiến trình theo tên
+⦁	Tìm kiếm file
+⦁	Tìm theo tên (phân biệt / không phân biệt hoa thường)
+⦁	Tìm theo owner / group
+⦁	Tìm theo thời gian chỉnh sửa / truy cập cuối
+⦁	Tìm theo dung lượng
+⦁	Tìm theo nội dung file
+⦁	Đặt lịch chạy định kỳ
+⦁	Chạy lệnh X định kỳ vào 0h00 mỗi ngày
+⦁	Chạy lệnh Y định kỳ vào 8h00 từ thứ hai đến thứ sáu
+⦁	Chạy lệnh Z định kỳ mỗi 3h một lần vào ngày 15 của tháng
+⦁	Phân quyền
+⦁	Tạo mới 3 user: UserA và UserB thuộc GroupX, UserC thuộc GroupY
+⦁	Phân quyền file F1 chỉ cho phép thực thi bởi UserA / GroupX
+⦁	Phân quyền thư mục D1 cho phép mọi user có quyền đọc file bên trong thư mục nhưng chỉ UserA / GroupX được tạo file mới
+⦁	Phân quyền thư mục D2 chỉ cho phép UserA / Group A được xem danh sách file trong thư mục đó
+3. Thực hành (7d)
+3.1. Lấy thông tin hệ thống  (2d)
+Viết shell script info.sh hiển thị các thông tin về hệ thống, bao gồm:
+⦁	Tên máy, tên bản phân phối
+⦁	Phiên bản hệ điều hành
+⦁	Thông tin CPU (tên, 32bit hay 64bit, tốc độ)
+⦁	Thông tin bộ nhớ vật lí (tổng bao nhiêu MB)
+⦁	Thông tin ổ đĩa còn trống bao nhiêu MB
+⦁	Danh sách địa chỉ IP của hệ thống
+⦁	Danh sách user trên hệ thống (sắp xếp theo thứ tự abc)
+⦁	Thông tin  các tiến trình đang chạy với quyền root (sắp xếp theo thứ tự abc)
+⦁	Thông tin các port đang mở (sắp xếp theo port tăng dần)
+⦁	Danh sách các thư mục trên hệ thống cho phép other có quyền ghi
+⦁	Danh sách các gói phần mềm  (tên gói, phiên bản) được cài trên hệ thống
+Ví dụ đầu ra:
+[Thong tin he thong]
+Ten may: myname 
+Ten ban phan phoi: Ubuntu 14.04.4 
+……
+3.2. Xử lý file (2d)
+Viết shell script checketc.sh đặt lịch chạy định kỳ 30 phút / lần để thực hiện:
+⦁	Kiểm tra thư mục /etc có file nào được tạo mới (so với lần chạy trước) không? Nếu có, hiển thị thông tin file đó và nếu là file text thì hiển thị 10 dòng đầu tiên của file
+⦁	Kiểm tra thư mục /etc có file nào thay đổi không?  Nếu có hiển thị tên file bị thay đổi
+⦁	Thư mục /etc có file nào bị xóa không? Nếu có hiển thị tên file bị xóa
+⦁	Đẩy log ra file /var/log/checketc.log
+⦁	Gửi email cho quản trị viên root@localhost
+
+
+
+Ví dụ file /var/log/checketc.log:
+[Log checketc - 12:00:00 12/05/2017]
+=== Danh sach file tao moi === 
+/etc/hackyou
+He thong cua ban da bi ma hoa. Chuyen 100bitcon vao boy_kute_noi_khong_ai_nghe@yahoo.com de giai ma.
+
+/etc/pam.d/test
+xxxxxxxxxx
+
+=== Danh sach file sua doi ===
+/etc/pam.d/password-auth
+
+=== Danh sach file bi xoa ===
+/etc/shadow
+3.3. Monitor SSH (2d)
+Viết shell script sshmonitor.sh đặt lịch chạy định kỳ 5 phút / lần để thực hiện:
+⦁	List danh sách các phiên đăng nhập mới qua ssh 
+⦁	Nếu phát hiện có phiên đăng nhập mới (so với lần chạy trước) thì gửi email cho quản trị viên root@localhost.
+Ví dụ nội dung mail:
+User root dang nhap thanh cong vao thoi gian 12:00:00 12/05/2017
+3.4. Cài đặt webserver (1d)
+Cài đặt webserver apache2. Tạo một file html trong thư mục gốc của webserver. đơn giản có nội dung sau:  “<h1>Hello world, apache2</h1>”. Sử dụng lệnh curl kiểm tra truy cập vào file html vừa tạo. 
+Tài liệu tham khảo:
+⦁	Google
+⦁	Linux LPIC
