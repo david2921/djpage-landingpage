@@ -19,3 +19,4 @@ Xem danh sách các tiến trình đang chạy: Tên, PID, User, Lệnh để ch
 Tắt tiến trình theo PID: kill <pid>
 Tắt tiến trình theo tên: killall <name>
 https://www.thuysys.com/server-vps/backup-restore/huong-dan-backup-website-tren-linux-toan-tap.html
+https://superuser.com/questions/300246/linux-command-to-find-files-changed-in-last-n-seconds
