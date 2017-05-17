@@ -20,3 +20,4 @@ Tắt tiến trình theo PID: kill <pid>
 Tắt tiến trình theo tên: killall <name>
 https://www.thuysys.com/server-vps/backup-restore/huong-dan-backup-website-tren-linux-toan-tap.html
 https://superuser.com/questions/300246/linux-command-to-find-files-changed-in-last-n-seconds
+https://www.linode.com/docs/tools-reference/tools/find-files-in-linux-using-the-command-line
