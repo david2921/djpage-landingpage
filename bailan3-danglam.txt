@@ -1,0 +1,21 @@
+#!/bin/bash
+#duong dan
+path=$1
+#file log
+fileLog="/home/hieultt/Desktop/checketc.log"
+touch $fileLog
+# header file
+date +"%H:%M:%S $d/$m/$Y" >> $fileLog
+#tai tat cac ca file trong /etc/ ve file
+
+# tim kiem file duoc tao moi trong 30mn so voi lan truoc
+echo "=== Danh sach file duoc tao moi ===" >> $fileLog
+
+# tim kiem file bi thay doi trong 30min so voi lan truoc
+echo "=== Danh sach file bi thay doi ===" >> $fileLog
+IFS=$'\n'
+array=($(find $path -mmin -30))
+for item in ${array[@]}
+do
+echo $item >> $fileLog
+done
