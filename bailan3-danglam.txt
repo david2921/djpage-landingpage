@@ -1,21 +1,102 @@
 #!/bin/bash
-#duong dan
+# duong dan
 path=$1
-#file log
+# file log
 fileLog="/home/hieultt/Desktop/checketc.log"
 touch $fileLog
 # header file
-date +"%H:%M:%S $d/$m/$Y" >> $fileLog
-#tai tat cac ca file trong /etc/ ve file
-
-# tim kiem file duoc tao moi trong 30mn so voi lan truoc
+date +"[Log checketc - %H:%M:%S %d/%m/%Y]" >> $fileLog
+# file chua cac file va folder trong duong dan trong lan chay truoc
+fileTemp="/home/hieultt/Desktop/tempFile"
+touch $fileTemp
+#----------Chuc nang 1 ---------#
+# tim kiem file duoc tao moi trong 30min so voi lan truoc
 echo "=== Danh sach file duoc tao moi ===" >> $fileLog
+IFS=$'\n'
+danhSachFileMoi=($(find $path -mmin -30 -printf "%f\n"))
+for item in ${danhSachFileMoi[@]}
+do
+# bien danh dau file moi ( 1: moi, 0: cu)
+declare -i fileMoi=1
+#tim kiem trong file temp chua cac file tu 30min truoc
+while IFS='' read -r line || [[ -n "$line" ]]; do
+# xu ly neu trung
+if [ "$item" = "$line" ]
+then
+fileMoi=0
+break
+fi
+done < $fileTemp
+# ket thuc vong lap while
+# file moi
+if [ \( $fileMoi -eq 1 \) -a \( "$item" != "." \) ]
+then
+echo $item >> $fileLog
+echo `head -n 10 $item` >> $fileLog
+fi
+done
+# ket thuc vong lap for
 
+#----------Chuc nang 2 ---------#
 # tim kiem file bi thay doi trong 30min so voi lan truoc
 echo "=== Danh sach file bi thay doi ===" >> $fileLog
 IFS=$'\n'
-array=($(find $path -mmin -30))
+array=($(find $path -mmin -30 -printf "%f\n"))
 for item in ${array[@]}
 do
 echo $item >> $fileLog
+done
+
+#----------Chuc nang 3 ---------#
+# tim kiem cac file bi xoa
+echo "=== Danh sach file bi xoa ===" >> $fileLog
+# tai tat ca cac file hien tai trong $path
+IFS=$'\n'
+danhSachFileHienTai=($(ls $path))
+#tim kiem trong file temp chua cac file tu 30min truoc
+while IFS='' read -r line || [[ -n "$line" ]]; do
+# bien chua gia tri file bi del ( 1: del, 0: chua del )
+declare fileDel=1
+echo "Line: $line"
+#tim kiem cac file hien tai
+for file in ${danhSachFileHienTai[@]}
+do
+echo "File hien tai: $file"
+if [ "$file" = "$line" ]
+then
+fileDel=0
+break
+fi
+
+done
+# ket thuc vong for kiem tra file hien tai
+
+# kiem tra file moi
+for item in ${danhSachFileMoi[@]}
+do
+echo "File moi: $item"
+if [ "$line" = "$item" ]
+then
+fileDel=0
+break
+fi
+
+done
+# ket thuc vong for kiem tra file moi
+
+if [ $fileDel -eq 1 ]
+then
+echo $file >> $fileLog
+fi
+
+done < $fileTemp
+# ket thuc vong lap while
+
+# tai tat ca cac file trong $path ve file
+echo > $fileTemp
+IFS=$'\n'
+danhSachFile=($(ls $path))
+for file in ${danhSachFile[@]}
+do
+echo $file >> $fileTemp
 done
