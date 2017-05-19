@@ -57,11 +57,9 @@ danhSachFileHienTai=($(ls $path))
 while IFS='' read -r line || [[ -n "$line" ]]; do
 # bien chua gia tri file bi del ( 1: del, 0: chua del )
 declare fileDel=1
-echo "Line: $line"
 #tim kiem cac file hien tai
 for file in ${danhSachFileHienTai[@]}
 do
-echo "File hien tai: $file"
 if [ "$file" = "$line" ]
 then
 fileDel=0
@@ -74,7 +72,6 @@ done
 # kiem tra file moi
 for item in ${danhSachFileMoi[@]}
 do
-echo "File moi: $item"
 if [ "$line" = "$item" ]
 then
 fileDel=0
@@ -84,13 +81,16 @@ fi
 done
 # ket thuc vong for kiem tra file moi
 
-if [ $fileDel -eq 1 ]
+if [ \( $fileDel -eq 1 \) -a \( "$line" != "." \) -a \( "$line" != "" \) ]
 then
-echo $file >> $fileLog
+echo $line >> $fileLog
 fi
 
 done < $fileTemp
 # ket thuc vong lap while
+
+# gui email
+
 
 # tai tat ca cac file trong $path ve file
 echo > $fileTemp
