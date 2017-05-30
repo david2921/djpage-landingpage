@@ -1,0 +1,53 @@
+https://stackoverflow.com/questions/9364668/xlib-window-name-problems
+https://stackoverflow.com/questions/5299989/x11-xlib-h-not-found-in-ubuntu
+https://stackoverflow.com/questions/30156202/xlib-c-get-window-handle-sendevent
+
+#include <X11/Xlib.h>
+#include <stdio.h>
+#include <unistd.h>
+
+Window *list (Display *disp, unsigned long *len) {
+    Atom prop = XInternAtom(disp,"_NET_CLIENT_LIST",False), type;
+    int form;
+    unsigned long remain;
+    unsigned char *list;
+
+    if (XGetWindowProperty(disp,XDefaultRootWindow(disp),prop,0,1024,False,AnyPropertyType,
+                &type,&form,len,&remain,&list) != Success) {
+        return 0;
+    }
+
+    return (Window*)list;
+}
+
+char *name (Display *disp, Window win) {
+    Atom prop = XInternAtom(disp,"WM_NAME",False), type;
+    int form;
+    unsigned long remain, len;
+    unsigned char *list;
+
+
+    if (XGetWindowProperty(disp,win,prop,0,1024,False,AnyPropertyType,
+                &type,&form,&len,&remain,&list) != Success) {
+
+        return NULL;
+    }
+
+    return (char*)list;
+}
+
+int main(int argc, char* argv[]){
+    int i;
+    unsigned long len;
+    XKeyEvent esend;
+    Display *disp = XOpenDisplay(NULL);
+    Window *listT;
+    char *nameT;
+
+        listT = (Window*)list(disp,&len);
+    for (i=0;i<(int)len;i++) {
+        nameT = name(disp,listT[i]);
+        printf("%d :  %s \n",i,nameT);
+        //free(nameT);
+        }
+}
