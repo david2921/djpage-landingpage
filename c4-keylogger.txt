@@ -6,6 +6,8 @@ https://stackoverflow.com/questions/22749444/listening-to-keyboard-events-withou
 https://stackoverflow.com/questions/4037230/global-hotkey-with-x11-xlib
 https://stackoverflow.com/questions/144901/system-wide-keyboard-hook-on-x-under-linux
 
+https://www.x.org/docs/X11/xlib.pdf
+
 --------------------------------------------------------------------------------
 Bai Lam
 #include <X11/X.h>
